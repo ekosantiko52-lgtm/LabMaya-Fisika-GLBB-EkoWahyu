@@ -1,0 +1,1802 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Maya Fisika: Gerak Lurus Berubah Beraturan (GLBB)</title>
+    
+    <style>
+        /* 100% OFFLINE STANDALONE CSS EMULATOR FOR TAILWIND UTILITIES */
+        :root {
+            --bg-dark: #0b0f19;
+            --bg-panel: rgba(15, 23, 42, 0.9);
+            --bg-card: rgba(15, 23, 42, 0.6);
+            --bg-inner: #020617;
+            --border-color: #1e293b;
+            --border-glow: rgba(59, 130, 246, 0.3);
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --text-muted: #64748b;
+            --primary: #3b82f6;
+            --primary-hover: #2563eb;
+            --emerald: #10b981;
+            --rose: #f43f5e;
+            --amber: #f59e0b;
+            --purple: #8b5cf6;
+        }
+
+        *, *::before, *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-primary);
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            padding: 0.5rem;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+        }
+
+        /* Core Layout Classes */
+        .flex { display: flex; }
+        .flex-col { flex-direction: column; }
+        .flex-row { flex-direction: row; }
+        .flex-wrap { flex-wrap: wrap; }
+        .items-center { align-items: center; }
+        .items-stretch { align-items: stretch; }
+        .justify-center { justify-content: center; }
+        .justify-between { justify-content: space-between; }
+        .flex-1 { flex: 1 1 0%; }
+        .hidden { display: none !important; }
+        
+        .grid { display: grid; }
+        .grid-cols-3 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+        .grid-cols-5 { grid-template-columns: repeat(5, minmax(0, 1fr)); }
+        .grid-cols-12 { grid-template-columns: repeat(12, minmax(0, 1fr)); }
+        .grid-cols-2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+        .grid-cols-1 { grid-template-columns: repeat(1, minmax(0, 1fr)); }
+        
+        .gap-1.5 { gap: 0.375rem; }
+        .gap-2 { gap: 0.5rem; }
+        .gap-2.5 { gap: 0.625rem; }
+        .gap-3 { gap: 0.75rem; }
+        .gap-4 { gap: 1rem; }
+        .gap-5 { gap: 1.25rem; }
+
+        .col-span-4 { grid-column: span 4 / span 4; }
+        .col-span-5 { grid-column: span 5 / span 5; }
+        .col-span-7 { grid-column: span 7 / span 7; }
+        .col-span-8 { grid-column: span 8 / span 8; }
+        .col-span-12 { grid-column: span 12 / span 12; }
+
+        /* Sizing & Spacing */
+        .h-screen { height: 100vh; }
+        .h-full { height: 100%; }
+        .h-\[10\%\] { height: 10%; }
+        .h-\[78\%\] { height: 78%; }
+        .h-\[8\%\] { height: 8%; }
+        .h-\[110px\] { height: 110px; }
+        .h-\[170px\] { height: 170px; }
+        .w-screen { width: 100vw; }
+        .w-full { width: 100%; }
+        .w-0 { width: 0%; }
+        .w-32 { width: 8rem; }
+        .w-44 { width: 11rem; }
+        .w-48 { width: 12rem; }
+        .h-44 { height: 11rem; }
+        .h-48 { height: 12rem; }
+        .max-w-md { max-w: 28rem; }
+        .max-w-xs { max-w: 20rem; }
+
+        .p-1 { padding: 0.25rem; }
+        .p-1.5 { padding: 0.375rem; }
+        .p-2 { padding: 0.5rem; }
+        .p-2.5 { padding: 0.625rem; }
+        .p-3 { padding: 0.75rem; }
+        .p-4 { padding: 1rem; }
+        .p-5 { padding: 1.25rem; }
+        
+        .px-1.5 { padding-left: 0.375rem; padding-right: 0.375rem; }
+        .px-2 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .px-2.5 { padding-left: 0.625rem; padding-right: 0.625rem; }
+        .px-3 { padding-left: 0.75rem; padding-right: 0.75rem; }
+        .px-4 { padding-left: 1rem; padding-right: 1rem; }
+        .px-8 { padding-left: 2rem; padding-right: 2rem; }
+        .py-1 { padding-top: 0.25rem; padding-bottom: 0.25rem; }
+        .py-1.5 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+        .py-2 { padding-top: 0.5rem; padding-bottom: 0.5rem; }
+        .py-3 { padding-top: 0.75rem; padding-bottom: 0.75rem; }
+        
+        .pb-1.5 { padding-bottom: 0.375rem; }
+        .pb-2 { padding-bottom: 0.5rem; }
+        .pb-3 { padding-bottom: 0.75rem; }
+        .pt-2 { padding-top: 0.5rem; }
+        .pt-3 { padding-top: 0.75rem; }
+        .pr-5 { padding-right: 1.25rem; }
+
+        .my-2 { margin-top: 0.5rem; margin-bottom: 0.5rem; }
+        .my-4 { margin-top: 1rem; margin-bottom: 1rem; }
+        .mb-1 { margin-bottom: 0.25rem; }
+        .mb-1.5 { margin-bottom: 0.375rem; }
+        .mb-2 { margin-bottom: 0.5rem; }
+        .mb-3 { margin-bottom: 0.75rem; }
+        .mb-4 { margin-bottom: 1rem; }
+        .mt-1 { margin-top: 0.25rem; }
+        .mt-2 { margin-top: 0.5rem; }
+        .mt-2.5 { margin-top: 0.625rem; }
+        .mt-3 { margin-top: 0.75rem; }
+        .mt-4 { margin-top: 1rem; }
+        .mx-auto { margin-left: auto; margin-right: auto; }
+
+        /* Borders & Rounding */
+        .border { border: 1px solid var(--border-color); }
+        .border-t { border-top: 1px solid var(--border-color); }
+        .border-b { border-bottom: 1px solid var(--border-color); }
+        .border-r { border-right: 1px solid var(--border-color); }
+        .border-2 { border-width: 2px; }
+        .border-slate-800 { border-color: #1e293b; }
+        .border-slate-900 { border-color: #0f172a; }
+        .border-slate-800\/80 { border-color: rgba(30, 41, 59, 0.8); }
+        .border-blue-500\/30 { border-color: rgba(59, 130, 246, 0.3); }
+        .border-blue-500\/20 { border-color: rgba(59, 130, 246, 0.2); }
+        .border-emerald-500\/40 { border-color: rgba(16, 185, 129, 0.4); }
+        .border-blue-400\/30 { border-color: rgba(96, 165, 250, 0.3); }
+        .border-indigo-500\/30 { border-color: rgba(99, 102, 241, 0.3); }
+        .border-indigo-500\/20 { border-color: rgba(99, 102, 241, 0.2); }
+        
+        .rounded-lg { border-radius: 0.5rem; }
+        .rounded-xl { border-radius: 0.75rem; }
+        .rounded-2xl { border-radius: 1rem; }
+        .rounded-full { border-radius: 9999px; }
+        .rounded-md { border-radius: 0.375rem; }
+
+        /* Colors & Panels */
+        .bg-slate-950 { background-color: var(--bg-inner); }
+        .bg-slate-900 { background-color: #0f172a; }
+        .bg-slate-900\/90 { background-color: rgba(15, 23, 42, 0.9); }
+        .bg-slate-900\/60 { background-color: rgba(15, 23, 42, 0.6); }
+        .bg-slate-950\/80 { background-color: rgba(2, 6, 23, 0.8); }
+        .bg-slate-950\/40 { background-color: rgba(2, 6, 23, 0.4); }
+        .bg-slate-950\/70 { background-color: rgba(2, 6, 23, 0.7); }
+        .bg-slate-950\/50 { background-color: rgba(2, 6, 23, 0.5); }
+        .bg-blue-600\/20 { background-color: rgba(37, 99, 235, 0.2); }
+        .bg-blue-500\/10 { background-color: rgba(59, 130, 246, 0.1); }
+        .bg-blue-950\/30 { background-color: rgba(23, 37, 84, 0.3); }
+        .bg-emerald-600\/20 { background-color: rgba(16, 185, 129, 0.2); }
+        .bg-purple-600\/20 { background-color: rgba(139, 92, 246, 0.2); }
+        .bg-indigo-500\/10 { background-color: rgba(99, 102, 241, 0.1); }
+        .bg-indigo-600\/20 { background-color: rgba(79, 70, 229, 0.2); }
+        .bg-indigo-950\/40 { background-color: rgba(30, 27, 75, 0.4); }
+        .bg-amber-500\/10 { background-color: rgba(245, 158, 11, 0.1); }
+        
+        .bg-blue-600 { background-color: #2563eb; }
+        .bg-emerald-600 { background-color: #059669; }
+        .bg-slate-800 { background-color: #1e293b; }
+        .bg-indigo-600 { background-color: #4f46e5; }
+
+        /* Typography Styles */
+        .text-slate-100 { color: var(--text-primary); }
+        .text-slate-200 { color: #e2e8f0; }
+        .text-slate-300 { color: var(--text-secondary); }
+        .text-slate-400 { color: #94a3b8; }
+        .text-slate-500 { color: var(--text-muted); }
+        .text-slate-600 { color: #475569; }
+        .text-blue-400 { color: #60a5fa; }
+        .text-emerald-400 { color: #34d399; }
+        .text-rose-400 { color: #f87171; }
+        .text-amber-400 { color: #fbbf24; }
+        .text-indigo-400 { color: #818cf8; }
+        .text-indigo-400\/80 { color: rgba(129, 140, 248, 0.8); }
+        .text-yellow-400 { color: #facc15; }
+        .text-purple-400 { color: #c084fc; }
+        .text-white { color: #ffffff; }
+
+        .text-xs { font-size: 0.75rem; }
+        .text-sm { font-size: 0.875rem; }
+        .text-base { font-size: 1rem; }
+        .text-lg { font-size: 1.125rem; }
+        .text-xl { font-size: 1.25rem; }
+        .text-3xl { font-size: 1.875rem; }
+        .text-4xl { font-size: 2.25rem; }
+        .text-\[10px\] { font-size: 10px; }
+        .text-\[11px\] { font-size: 11px; }
+        .text-\[9px\] { font-size: 9px; }
+
+        .font-semibold { font-weight: 600; }
+        .font-bold { font-weight: 700; }
+        .font-extrabold { font-weight: 800; }
+        .font-medium { font-weight: 500; }
+        .tracking-wider { tracking-wider: 0.05em; letter-spacing: 0.05em; }
+        .tracking-wide { letter-spacing: 0.025em; }
+        .tracking-widest { letter-spacing: 0.1em; }
+        .uppercase { text-transform: uppercase; }
+        .italic { font-style: italic; }
+        .text-center { text-align: center; }
+        .text-left { text-align: left; }
+
+        /* Effects & Interactive Controls */
+        .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.5); }
+        .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8); }
+        .backdrop-blur-md { backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); }
+        .cursor-pointer { cursor: pointer; }
+        .select-none { user-select: none; }
+        .transition-all { transition: all 0.3s ease; }
+        .duration-100 { transition-duration: 100ms; }
+        .duration-300 { transition-duration: 300ms; }
+        .duration-500 { transition-duration: 500ms; }
+        .duration-700 { transition-duration: 700ms; }
+        
+        .accent-emerald-500 { accent-color: var(--emerald); }
+        .accent-rose-500 { accent-color: var(--rose); }
+
+        .scale-105 { transform: scale(1.05); }
+        .scale-110 { transform: scale(1.10); }
+        .translate-y-3 { transform: translateY(0.75rem); }
+        .translate-y-4 { transform: translateY(1rem); }
+        .opacity-0 { opacity: 0; }
+        .pointer-events-none { pointer-events: none; }
+
+        /* Custom Specific Designs */
+        .tech-font {
+            font-family: 'Rajdhani', 'Century Gothic', 'Trebuchet MS', sans-serif;
+            font-weight: 600;
+        }
+        .display-font {
+            font-family: 'Orbitron', 'Century Gothic', 'Trebuchet MS', 'Impact', sans-serif;
+            letter-spacing: 0.05em;
+        }
+
+        /* Hover states emulate */
+        .hover\:from-blue-500:hover { background-image: linear-gradient(to right, #3b82f6, #6366f1); }
+        .hover\:bg-blue-500:hover { background-color: #3b82f6; }
+        .hover\:bg-emerald-500:hover { background-color: #10b981; }
+        .hover\:bg-slate-800:hover { background-color: #1e293b; }
+        .hover\:bg-slate-700:hover { background-color: #334155; }
+        .hover\:border-slate-700:hover { border-color: #334155; }
+        
+        /* Active State */
+        .active\:scale-95:active { transform: scale(0.95); }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0f172a;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 3px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #60a5fa;
+        }
+
+        /* Table specific */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        th, td {
+            padding: 0.25rem;
+            text-align: center;
+        }
+
+        /* Form Inputs */
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: #020617;
+            height: 6px;
+            border-radius: 9999px;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary);
+            cursor: pointer;
+            box-shadow: 0 0 8px var(--primary);
+        }
+
+        input[type="number"], input[type="text"], textarea {
+            background-color: rgba(2, 6, 23, 0.6);
+            border: 1px solid var(--border-color);
+            color: #f1f5f9;
+            border-radius: 0.375rem;
+            outline: none;
+            padding: 0.25rem;
+        }
+        input[type="number"]:focus, input[type="text"]:focus, textarea:focus {
+            border-color: var(--primary);
+        }
+
+        /* Glowing Animations */
+        @keyframes pulse-glow {
+            0%, 100% { opacity: 0.6; box-shadow: 0 0 10px rgba(59, 130, 246, 0.3); }
+            50% { opacity: 1; box-shadow: 0 0 20px rgba(59, 130, 246, 0.6); }
+        }
+        .animate-pulse {
+            animation: pulse-glow 2s infinite ease-in-out;
+        }
+
+        /* SVG styles override */
+        svg.icon {
+            display: inline-block;
+            width: 1.25em;
+            height: 1.25em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body class="h-screen w-screen overflow-hidden flex flex-col justify-between text-slate-100 p-2 md:p-4 select-none">
+
+    <!-- Sound Effects Synthesizer -->
+    <script>
+        class SoundFX {
+            constructor() {
+                this.ctx = null;
+            }
+            init() {
+                if (!this.ctx) {
+                    this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            }
+            playBeep(freq = 440, type = 'sine', duration = 0.1, volume = 0.1) {
+                this.init();
+                if (!this.ctx) return;
+                const osc = this.ctx.createOscillator();
+                const gain = this.ctx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
+                gain.gain.setValueAtTime(volume, this.ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.00001, this.ctx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(this.ctx.destination);
+                osc.start();
+                osc.stop(this.ctx.currentTime + duration);
+            }
+            playClick() { this.playBeep(800, 'sine', 0.08, 0.15); }
+            playSuccess() {
+                this.playBeep(523.25, 'triangle', 0.15, 0.2); // C5
+                setTimeout(() => this.playBeep(659.25, 'triangle', 0.15, 0.2), 100); // E5
+                setTimeout(() => this.playBeep(783.99, 'triangle', 0.3, 0.2), 200); // G5
+            }
+            playFail() {
+                this.playBeep(330, 'sawtooth', 0.2, 0.15); // E4
+                setTimeout(() => this.playBeep(293.66, 'sawtooth', 0.3, 0.15), 150); // D4
+            }
+            playReset() {
+                this.playBeep(600, 'sine', 0.1, 0.1);
+                setTimeout(() => this.playBeep(400, 'sine', 0.15, 0.1), 100);
+            }
+            playTick() { this.playBeep(1200, 'sine', 0.02, 0.05); }
+            playStartup() {
+                this.init();
+                if (!this.ctx) return;
+                const freqs = [130.81, 164.81, 196.00, 261.63, 329.63, 392.00, 523.25];
+                freqs.forEach((f, idx) => {
+                    setTimeout(() => {
+                        const osc = this.ctx.createOscillator();
+                        const gain = this.ctx.createGain();
+                        osc.type = 'sawtooth';
+                        osc.frequency.setValueAtTime(f, this.ctx.currentTime);
+                        osc.frequency.exponentialRampToValueAtTime(f * 2, this.ctx.currentTime + 1.2);
+                        
+                        gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
+                        gain.gain.exponentialRampToValueAtTime(0.00001, this.ctx.currentTime + 1.5);
+                        
+                        const filter = this.ctx.createBiquadFilter();
+                        filter.type = 'lowpass';
+                        filter.frequency.setValueAtTime(900, this.ctx.currentTime);
+                        
+                        osc.connect(filter);
+                        filter.connect(gain);
+                        gain.connect(this.ctx.destination);
+                        
+                        osc.start();
+                        osc.stop(this.ctx.currentTime + 1.5);
+                    }, idx * 70);
+                });
+            }
+        }
+        const sfx = new SoundFX();
+    </script>
+
+    <!-- SPLASH SCREEN INTERACTIVE OVERLAY -->
+    <div id="splash-screen" class="fixed inset-0 z-50 bg-[#0b0f19] flex flex-col items-center justify-center p-4" style="position: fixed; top: 0; left: 0; right: 0; bottom: 0; z-index: 50;">
+        <div class="max-w-md w-full text-center space-y-6">
+            <!-- Glowing App Icon: Inline High-Tech Physics Logo -->
+            <div class="relative inline-block" style="position: relative; display: inline-block;">
+                <div class="absolute -inset-1.5 rounded-full bg-gradient-to-r from-blue-500 via-teal-400 to-indigo-600 blur-md opacity-75 animate-pulse" style="position: absolute; top: -6px; left: -6px; right: -6px; bottom: -6px; border-radius: 50%; filter: blur(8px); background: linear-gradient(45deg, #3b82f6, #2dd4bf, #4f46e5); z-index: -1;"></div>
+                <!-- Custom High-Tech SVG Physics Laboratory Logo -->
+                <svg class="relative w-32 h-32 md:w-36 md:h-36 object-cover rounded-full border-2 border-slate-800 shadow-2xl mx-auto bg-slate-950" viewBox="0 0 100 100" style="display: block; margin: 0 auto; border-radius: 50%; border: 2px solid #1e293b; background-color: #020617; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.8);">
+                    <!-- Orbiting Atom Lines -->
+                    <ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke="#3b82f6" stroke-width="1.5" transform="rotate(30 50 50)"/>
+                    <ellipse cx="50" cy="50" rx="38" ry="12" fill="none" stroke="#10b981" stroke-width="1.5" transform="rotate(150 50 50)"/>
+                    <!-- Speed gauge inside logo -->
+                    <circle cx="50" cy="50" r="18" fill="none" stroke="#475569" stroke-width="2"/>
+                    <path d="M 36 64 A 20 20 0 1 1 64 64" fill="none" stroke="#818cf8" stroke-width="3" stroke-linecap="round"/>
+                    <!-- Gauge Arrow pointing right to denote acceleration -->
+                    <line x1="50" y1="50" x2="62" y2="40" stroke="#f43f5e" stroke-width="2.5" stroke-linecap="round"/>
+                    <circle cx="50" cy="50" r="4" fill="#f1f5f9"/>
+                    <!-- Small Orbiting Particles -->
+                    <circle cx="20" cy="33" r="3" fill="#3b82f6"/>
+                    <circle cx="80" cy="67" r="3" fill="#10b981"/>
+                </svg>
+            </div>
+
+            <!-- Title & Subtitle -->
+            <div class="space-y-1">
+                <h1 class="text-3xl md:text-4xl font-extrabold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-teal-300 to-indigo-400 display-font uppercase" style="background: linear-gradient(to right, #60a5fa, #5eead4, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    LAB FISIKA MAYA
+                </h1>
+                <p class="text-xs md:text-sm text-slate-400 tracking-wide font-semibold uppercase display-font">Gerak Lurus Berubah Beraturan (GLBB)</p>
+                <p class="text-[10px] text-indigo-400/80 uppercase tracking-widest font-bold">Fase F - Kurikulum Merdeka</p>
+            </div>
+
+            <!-- Auto Progress Loading Bar -->
+            <div id="loading-container" class="space-y-2.5 max-w-xs mx-auto">
+                <div class="w-full bg-slate-900 border border-slate-800/80 h-3 rounded-full overflow-hidden p-[2px]" style="background-color: #0f172a; border: 1px solid rgba(30,41,59,0.8); height: 12px; border-radius: 9999px; padding: 2px;">
+                    <div id="loading-bar" class="bg-gradient-to-r from-blue-500 via-teal-400 to-indigo-500 h-full w-0 rounded-full transition-all duration-100" style="background: linear-gradient(to right, #3b82f6, #2dd4bf, #6366f1); height: 100%; width: 0%; border-radius: 9999px; transition: width 0.1s ease;"></div>
+                </div>
+                <p id="loading-text" class="text-[10px] text-slate-500 display-font uppercase tracking-widest font-bold">Menginisialisasi Lab: 0%</p>
+            </div>
+
+            <!-- Start Interactive Button (Initially Hidden) -->
+            <div id="start-btn-container" class="hidden opacity-0 transform translate-y-4 transition-all duration-500">
+                <button onclick="dismissSplash()" class="px-8 py-3 bg-gradient-to-r from-blue-600 via-indigo-600 to-blue-700 hover:from-blue-500 hover:to-indigo-500 text-white font-bold rounded-xl text-xs md:text-sm display-font uppercase tracking-widest shadow-lg shadow-blue-500/20 hover:shadow-blue-500/40 border border-blue-400/30 transition-all active:scale-95 flex items-center gap-2 mx-auto" style="background: linear-gradient(to right, #2563eb, #4f46e5); display: flex; align-items: center; gap: 0.5rem; outline: none; border: 1px solid rgba(96,165,250,0.3); border-radius: 0.75rem; color: #ffffff; cursor: pointer;">
+                    Mulai Eksperimen 
+                    <svg class="icon" viewBox="0 0 24 24" style="width: 1em; height: 1em; fill: currentColor;"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER BAR -->
+    <header class="bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-2 flex justify-between items-center shadow-lg backdrop-blur-md h-[10%]">
+        <div class="flex items-center space-x-3">
+            <div class="bg-blue-600/20 p-2 rounded-lg border border-blue-500/30">
+                <svg class="text-blue-400" style="width: 1.5rem; height: 1.5rem; fill: none; stroke: currentColor; stroke-width: 2;" viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="9" stroke-dasharray="32 14"/>
+                    <line x1="12" y1="12" x2="16" y2="8" stroke-linecap="round"/>
+                </svg>
+            </div>
+            <div>
+                <h1 class="text-base md:text-lg font-bold tracking-wider text-transparent bg-clip-text bg-gradient-to-r from-blue-400 via-teal-300 to-indigo-400 display-font uppercase" style="background: linear-gradient(to right, #60a5fa, #5eead4, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
+                    LAB MAYA FISIKA: GLBB
+                </h1>
+                <p class="text-[10px] md:text-xs text-slate-400 tracking-wide">Fase F - Kurikulum Merdeka (Gerak Lurus Berubah Beraturan)</p>
+            </div>
+        </div>
+        
+        <!-- Tab Navigation Buttons (Prosedur First, then Teori) -->
+        <nav class="flex space-x-1 bg-slate-950/80 p-1 rounded-xl border border-slate-800">
+            <button onclick="switchTab('prosedur')" id="btn-prosedur" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-blue-400 bg-blue-500/10 border border-blue-500/20" style="cursor: pointer; display: flex; align-items: center; border-radius: 0.5rem; outline: none;">
+                <svg class="icon" viewBox="0 0 24 24" style="width:1.2em; height:1.2em; fill:currentColor;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Prosedur
+            </button>
+            <button onclick="switchTab('teori')" id="btn-teori" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800" style="cursor: pointer; display: flex; align-items: center; border-radius: 0.5rem; outline: none; border: none; background: transparent;">
+                <svg class="icon" viewBox="0 0 24 24" style="width:1.2em; height:1.2em; fill:currentColor;"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg> Teori
+            </button>
+            <button onclick="switchTab('simulasi')" id="btn-simulasi" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800" style="cursor: pointer; display: flex; align-items: center; border-radius: 0.5rem; outline: none; border: none; background: transparent;">
+                <svg class="icon" viewBox="0 0 24 24" style="width:1.2em; height:1.2em; fill:currentColor;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 14c-1.66 0-3-1.34-3-3s1.34-3 3-3 3 1.34 3 3-1.34 3-3 3z"/></svg> Simulasi
+            </button>
+            <button onclick="switchTab('soal')" id="btn-soal" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800" style="cursor: pointer; display: flex; align-items: center; border-radius: 0.5rem; outline: none; border: none; background: transparent;">
+                <svg class="icon" viewBox="0 0 24 24" style="width:1.2em; height:1.2em; fill:currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 16h-2v-2h2v2zm1.07-7.75l-.9.92C12.45 11.9 12 12.5 12 14h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.25z"/></svg> Evaluasi (10 Soal)
+            </button>
+            <button onclick="switchTab('lkpd')" id="btn-lkpd" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800" style="cursor: pointer; display: flex; align-items: center; border-radius: 0.5rem; outline: none; border: none; background: transparent;">
+                <svg class="icon" viewBox="0 0 24 24" style="width:1.2em; height:1.2em; fill:currentColor;"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> LKPD Kelompok
+            </button>
+            <button onclick="switchTab('pengembang')" id="btn-pengembang" class="tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-slate-400 hover:text-white hover:bg-slate-800" style="cursor: pointer; display: flex; align-items: center; border-radius: 0.5rem; outline: none; border: none; background: transparent;">
+                <svg class="icon" viewBox="0 0 24 24" style="width:1.2em; height:1.2em; fill:currentColor;"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg> Pengembang
+            </button>
+        </nav>
+    </header>
+
+    <!-- MAIN WORKSPACE -->
+    <main class="h-[78%] my-2 bg-slate-950/40 rounded-2xl border border-slate-900 p-3 relative overflow-hidden flex flex-col justify-center">
+
+        <!-- TAB CONTENT: PROSEDUR (Active by Default) -->
+        <section id="tab-prosedur" class="tab-pane h-full w-full">
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-5 h-full flex flex-col justify-between" style="background-color: rgba(15,23,42,0.6); border: 1px solid rgba(30,41,59,0.8); border-radius: 0.75rem;">
+                <div>
+                    <h2 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 flex items-center gap-2" style="background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center;">
+                        <svg class="text-blue-400" viewBox="0 0 24 24" style="width:1.25em; height:1.25em; fill:currentColor; margin-right: 0.5rem;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> Panduan Penggunaan Lab Maya
+                    </h2>
+                    <p class="text-slate-400 text-xs mt-1">Ikuti langkah-langkah berikut untuk melakukan praktikum mandiri maupun kelompok.</p>
+                </div>
+
+                <div class="grid grid-cols-3 gap-4 my-4 flex-1 items-stretch">
+                    <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-4 flex flex-col">
+                        <div class="w-8 h-8 rounded-full bg-blue-600/20 border border-blue-500/40 text-blue-400 flex items-center justify-center font-bold text-sm mb-3 display-font" style="width: 2rem; height: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: rgba(37,99,235,0.2); border: 1px solid rgba(59,130,246,0.4); color: #60a5fa; margin-bottom: 0.75rem;">01</div>
+                        <h3 class="font-bold text-sm text-slate-200">Atur Parameter Awal</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">
+                            Buka tab <span class="text-blue-400 font-semibold">Simulasi</span>. Gunakan slider kontrol untuk mengatur <span class="text-emerald-400 font-semibold">Kecepatan Awal ($v_0$)</span> dan <span class="text-rose-400 font-semibold">Percepatan ($a$)</span> sesuai dengan petunjuk penugasan di LKPD.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-4 flex flex-col">
+                        <div class="w-8 h-8 rounded-full bg-emerald-600/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center font-bold text-sm mb-3 display-font" style="width: 2rem; height: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: rgba(16,185,129,0.2); border: 1px solid rgba(16,185,129,0.4); color: #34d399; margin-bottom: 0.75rem;">02</div>
+                        <h3 class="font-bold text-sm text-slate-200">Jalankan Simulasi</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">
+                            Klik tombol <span class="text-emerald-400 font-semibold"><svg class="icon text-emerald-400" viewBox="0 0 24 24" style="width:1rem; height:1rem; fill:currentColor; vertical-align:middle;"><path d="M8 5v14l11-7z"/></svg> Mulai</span>. Perhatikan gerakan mobil di lintasan dan perkembangan grafik real-time di bawahnya. Anda juga dapat menggunakan fitur <span class="text-amber-400 font-semibold">Pause</span> atau tombol <span class="text-rose-400 font-semibold">Reset</span>.
+                        </p>
+                    </div>
+
+                    <div class="bg-slate-950/70 border border-slate-800/80 rounded-xl p-4 flex flex-col">
+                        <div class="w-8 h-8 rounded-full bg-purple-600/20 border border-purple-500/40 text-purple-400 flex items-center justify-center font-bold text-sm mb-3 display-font" style="width: 2rem; height: 2rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; background-color: rgba(139,92,246,0.2); border: 1px solid rgba(139,92,246,0.4); color: #c084fc; margin-bottom: 0.75rem;">03</div>
+                        <h3 class="font-bold text-sm text-slate-200">Catat Data & Jawab Soal</h3>
+                        <p class="text-[11px] text-slate-400 mt-2 leading-relaxed">
+                            Amati tabel ticker timer dan nilai waktu, kecepatan, serta posisi sesaat. Salin hasil pengamatan Anda ke tabel yang disediakan pada tab <span class="text-purple-400 font-semibold">LKPD Kelompok</span>. Setelah itu, uji pemahaman Anda di tab <span class="text-pink-400 font-semibold">Evaluasi</span>.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="bg-blue-950/30 border border-blue-900/40 p-3 rounded-lg flex items-center justify-between text-xs text-blue-400" style="display: flex; align-items: center; justify-content: space-between;">
+                    <span class="flex items-center gap-2" style="display: flex; align-items: center; gap: 0.5rem;">
+                        <svg class="text-blue-400" viewBox="0 0 24 24" style="width:1.25em; height:1.25em; fill:currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                        <strong>Tips Praktikum:</strong> Gunakan variasi nilai percepatan positif untuk GLBB dipercepat dan negatif untuk GLBB diperlambat.
+                    </span>
+                    <button onclick="switchTab('simulasi')" class="bg-blue-600 hover:bg-blue-500 text-white px-3 py-1 rounded font-bold transition-all" style="outline: none; border: none; padding: 0.25rem 0.75rem; border-radius: 0.25rem; color: #ffffff; cursor: pointer;">
+                        Mulai Simulasi Sekarang
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB CONTENT: TEORI (Hidden by Default) -->
+        <section id="tab-teori" class="tab-pane hidden h-full w-full flex flex-col justify-between">
+            <div class="grid grid-cols-12 gap-4 h-full items-stretch">
+                <!-- Left Side: Basic Definition -->
+                <div class="col-span-7 bg-slate-900/60 border border-slate-800/80 rounded-xl p-4 flex flex-col justify-between">
+                    <div>
+                        <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                            Konsep Dasar
+                        </span>
+                        <h2 class="text-xl font-bold mt-2 text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400" style="background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">Apa itu Gerak Lurus Berubah Beraturan?</h2>
+                        <p class="text-slate-300 mt-2 text-xs md:text-sm leading-relaxed">
+                            <span class="text-blue-400 font-semibold">Gerak Lurus Berubah Beraturan (GLBB)</span> adalah gerak suatu benda pada lintasan yang lurus dengan <span class="text-amber-400 font-semibold">percepatan ($a$) yang konstan atau tetap</span>. Karena percepatannya konstan, maka kecepatan benda akan berubah secara teratur setiap detiknya.
+                        </p>
+                        <p class="text-slate-300 mt-2 text-xs md:text-sm leading-relaxed">
+                            Terdapat dua jenis GLBB berdasarkan arah kecepatannya:
+                        </p>
+                        <ul class="list-none space-y-1.5 mt-2 text-xs md:text-sm text-slate-300" style="list-style: none;">
+                            <li class="flex items-center gap-2" style="display: flex; align-items: center; gap: 0.5rem;"><svg class="text-emerald-400" viewBox="0 0 24 24" style="width:1.2em; height:1.2em; fill:currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 10h3l-4 4-4-4h3V8h2v4z" transform="rotate(180 12 12)"/></svg> <strong>GLBB Dipercepat:</strong> Nilai percepatan positif ($a > 0$), kecepatan benda semakin lama semakin besar.</li>
+                            <li class="flex items-center gap-2" style="display: flex; align-items: center; gap: 0.5rem;"><svg class="text-rose-400" viewBox="0 0 24 24" style="width:1.2em; height:1.2em; fill:currentColor;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 10h3l-4 4-4-4h3V8h2v4z"/></svg> <strong>GLBB Diperlambat:</strong> Nilai percepatan negatif ($a < 0$), kecepatan benda semakin lama semakin kecil hingga akhirnya berhenti.</li>
+                        </ul>
+                    </div>
+
+                    <div class="bg-slate-950/80 border border-slate-800 p-3 rounded-lg flex items-center space-x-3" style="display: flex; align-items: center;">
+                        <svg class="text-amber-400" viewBox="0 0 24 24" style="width: 2rem; height: 2rem; fill: currentColor; margin-right: 0.75rem;"><path d="M12 2.2C6.5 2.2 2 6.7 2 12.2s4.5 10 10 10 10-4.5 10-10-4.5-10-10-10zm0 18c-4.4 0-8-3.6-8-8s3.6-8 8-8 8 3.6 8 8-3.6 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/></svg>
+                        <p class="text-[11px] md:text-xs text-slate-400 leading-normal">
+                            <strong>Contoh di dunia nyata:</strong> Buah kelapa jatuh dari pohonnya (GLBB dipercepat oleh gravitasi), atau mobil yang sedang direm hingga berhenti di lampu lalu lintas (GLBB diperlambat).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Right Side: Formulas & Graphs -->
+                <div class="col-span-5 flex flex-col gap-3 justify-between">
+                    <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 flex-1 flex flex-col justify-between">
+                        <h3 class="text-sm font-bold text-blue-400 border-b border-slate-800 pb-1.5 flex items-center gap-2" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <svg viewBox="0 0 24 24" style="width:1.25em; height:1.25em; fill:currentColor;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg> Persamaan Matematis GLBB
+                        </h3>
+                        <div class="space-y-2 mt-2">
+                            <div class="bg-slate-950/50 p-2 rounded-lg border border-slate-800 flex justify-between items-center" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="text-xs text-slate-400">Kecepatan Sesaat ($v_t$)</span>
+                                <span class="text-sm font-bold display-font text-emerald-400">$v_t = v_0 + a \cdot t$</span>
+                            </div>
+                            <div class="bg-slate-950/50 p-2 rounded-lg border border-slate-800 flex justify-between items-center" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="text-xs text-slate-400">Posisi/Jarak ($s$)</span>
+                                <span class="text-sm font-bold display-font text-blue-400">$s = v_0 \cdot t + \frac{1}{2} a \cdot t^2$</span>
+                            </div>
+                            <div class="bg-slate-950/50 p-2 rounded-lg border border-slate-800 flex justify-between items-center" style="display: flex; justify-content: space-between; align-items: center;">
+                                <span class="text-xs text-slate-400">Hubungan Tanpa Waktu</span>
+                                <span class="text-sm font-bold display-font text-purple-400">$v_t^2 = v_0^2 + 2 \cdot a \cdot s$</span>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-1.5 text-[10px] text-slate-400 border-t border-slate-800 pt-2 mt-2">
+                            <div>$v_0$ : Kecepatan awal ($m/s$)</div>
+                            <div>$v_t$ : Kecepatan akhir ($m/s$)</div>
+                            <div>$a$ : Percepatan ($m/s^2$)</div>
+                            <div>$s$ : Jarak tempuh ($m$)</div>
+                        </div>
+                    </div>
+
+                    <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 flex-1 flex flex-col justify-between">
+                        <h3 class="text-sm font-bold text-amber-400 border-b border-slate-800 pb-1.5 flex items-center gap-2" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <svg viewBox="0 0 24 24" style="width:1.25em; height:1.25em; fill:none; stroke:currentColor; stroke-width:2;"><path d="M3 3v18h18M18.7 8l-5.1 5.2-2.8-2.7L7 14.3" stroke-linecap="round" stroke-linejoin="round"/></svg> Representasi Grafik GLBB
+                        </h3>
+                        <div class="grid grid-cols-3 gap-2 mt-2 flex-1 items-center">
+                            <div class="bg-slate-950 p-1.5 rounded border border-slate-800 text-center">
+                                <span class="text-[9px] text-slate-400 block mb-1">Kurva s-t (Parabola)</span>
+                                <div class="h-10 flex items-end justify-center" style="display: flex; align-items: flex-end; justify-content: center;">
+                                    <svg viewBox="0 0 100 50" class="w-full h-8 text-blue-400 stroke-current fill-none" style="stroke: #60a5fa; fill: none;" stroke-width="2">
+                                        <path d="M 10 45 Q 50 45 90 10" />
+                                        <line x1="10" y1="45" x2="95" y2="45" stroke="#475569" stroke-width="1"/>
+                                        <line x1="10" y1="5" x2="10" y2="45" stroke="#475569" stroke-width="1"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="bg-slate-950 p-1.5 rounded border border-slate-800 text-center">
+                                <span class="text-[9px] text-slate-400 block mb-1">Kurva v-t (Linear)</span>
+                                <div class="h-10 flex items-end justify-center" style="display: flex; align-items: flex-end; justify-content: center;">
+                                    <svg viewBox="0 0 100 50" class="w-full h-8 text-emerald-400 stroke-current fill-none" style="stroke: #34d399; fill: none;" stroke-width="2">
+                                        <line x1="10" y1="40" x2="90" y2="10" />
+                                        <line x1="10" y1="45" x2="95" y2="45" stroke="#475569" stroke-width="1"/>
+                                        <line x1="10" y1="5" x2="10" y2="45" stroke="#475569" stroke-width="1"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="bg-slate-950 p-1.5 rounded border border-slate-800 text-center">
+                                <span class="text-[9px] text-slate-400 block mb-1">Kurva a-t (Konstan)</span>
+                                <div class="h-10 flex items-end justify-center" style="display: flex; align-items: flex-end; justify-content: center;">
+                                    <svg viewBox="0 0 100 50" class="w-full h-8 text-purple-400 stroke-current fill-none" style="stroke: #c084fc; fill: none;" stroke-width="2">
+                                        <line x1="10" y1="20" x2="90" y2="20" />
+                                        <line x1="10" y1="45" x2="95" y2="45" stroke="#475569" stroke-width="1"/>
+                                        <line x1="10" y1="5" x2="10" y2="45" stroke="#475569" stroke-width="1"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB CONTENT: SIMULASI -->
+        <section id="tab-simulasi" class="tab-pane hidden h-full w-full">
+            <div class="grid grid-cols-12 gap-3 h-full items-stretch">
+                <!-- Control Panel (Left Side - 4 Columns) -->
+                <div class="col-span-4 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-indigo-400 flex items-center gap-2 border-b border-slate-800 pb-2 mb-3" style="background: linear-gradient(to right, #60a5fa, #818cf8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem;">
+                            <svg style="width:1.25em; height:1.25em; fill:currentColor;" viewBox="0 0 24 24"><path d="M3 17v2h6v-2H3zM3 5v2h10V5H3zm10 16v-2h8v-2h-8v-2h-2v6h2zM7 9v2H3v2h4v2h2V9H7zm14 4v-2H11v2h10zm-6-4h2V7h4V5h-4V3h-2v6z"/></svg> Panel Kontrol
+                        </h3>
+
+                        <!-- Initial Velocity Slider -->
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-1" style="display: flex; justify-content: space-between; align-items: center;">
+                                <label class="text-xs text-slate-300 flex items-center gap-1.5" style="display: flex; align-items: center; gap: 0.375rem;">
+                                    <svg class="text-emerald-400" style="width:1.2em; height:1.2em; fill:currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg> Kecepatan Awal ($v_0$)
+                                </label>
+                                <span class="text-xs font-bold display-font text-emerald-400" id="val-v0">5 m/s</span>
+                            </div>
+                            <input type="range" id="input-v0" min="0" max="20" step="1" value="5" oninput="updateSimParams(); sfx.playTick();" class="w-full accent-emerald-500 bg-slate-950 h-1.5 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[9px] text-slate-500 mt-0.5" style="display: flex; justify-content: space-between;">
+                                <span>0 m/s</span>
+                                <span>10 m/s</span>
+                                <span>20 m/s</span>
+                            </div>
+                        </div>
+
+                        <!-- Acceleration Slider -->
+                        <div class="mb-4">
+                            <div class="flex justify-between items-center mb-1" style="display: flex; justify-content: space-between; align-items: center;">
+                                <label class="text-xs text-slate-300 flex items-center gap-1.5" style="display: flex; align-items: center; gap: 0.375rem;">
+                                    <svg class="text-rose-400" style="width:1.2em; height:1.2em; fill:none; stroke:currentColor; stroke-width:2;" viewBox="0 0 24 24"><path d="M12 19V5m-7 7l7-7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg> Percepatan ($a$)
+                                </label>
+                                <span class="text-xs font-bold display-font text-rose-400" id="val-a">1.5 m/s²</span>
+                            </div>
+                            <input type="range" id="input-a" min="-4" max="4" step="0.5" value="1.5" oninput="updateSimParams(); sfx.playTick();" class="w-full accent-rose-500 bg-slate-950 h-1.5 rounded-lg appearance-none cursor-pointer">
+                            <div class="flex justify-between text-[9px] text-slate-500 mt-0.5" style="display: flex; justify-content: space-between;">
+                                <span>-4 m/s² (Lambat)</span>
+                                <span>0 (GLB)</span>
+                                <span>+4 m/s² (Cepat)</span>
+                            </div>
+                        </div>
+
+                        <!-- Info display -->
+                        <div class="bg-slate-950/80 rounded-lg p-2.5 border border-slate-800 space-y-1.5">
+                            <div class="flex justify-between text-[11px]" style="display: flex; justify-content: space-between;">
+                                <span class="text-slate-400">Mode Gerak:</span>
+                                <span class="font-bold uppercase tracking-wider text-xs" id="mode-badge">GLBB Dipercepat</span>
+                            </div>
+                            <div class="flex justify-between text-[11px]" style="display: flex; justify-content: space-between;">
+                                <span class="text-slate-400">Waktu Tempuh ($t$):</span>
+                                <span class="font-semibold text-blue-400 display-font" id="sim-time">0.00 s</span>
+                            </div>
+                            <div class="flex justify-between text-[11px]" style="display: flex; justify-content: space-between;">
+                                <span class="text-slate-400">Posisi Sesaat ($s$):</span>
+                                <span class="font-semibold text-yellow-400 display-font" id="sim-pos">0.00 m</span>
+                            </div>
+                            <div class="flex justify-between text-[11px]" style="display: flex; justify-content: space-between;">
+                                <span class="text-slate-400">Kecepatan Sesaat ($v_t$):</span>
+                                <span class="font-semibold text-emerald-400 display-font" id="sim-vel">5.00 m/s</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="space-y-2 mt-4">
+                        <div class="grid grid-cols-2 gap-2">
+                            <button id="btn-play" onclick="toggleSim()" class="bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-all" style="outline: none; border: none; cursor: pointer; color: #ffffff; display: flex; align-items: center; justify-content: center; gap: 0.375rem;">
+                                <svg class="icon" viewBox="0 0 24 24" style="width: 1em; height: 1em; fill: currentColor;"><path d="M8 5v14l11-7z"/></svg> <span>Mulai</span>
+                            </button>
+                            <button id="btn-reset" onclick="resetSim()" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1.5 border border-slate-700 transition-all" style="outline: none; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.375rem;">
+                                <svg class="icon" viewBox="0 0 24 24" style="width: 1em; height: 1em; fill: currentColor;"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg> Reset
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Live Animation & Charts Area (Right Side - 8 Columns) -->
+                <div class="col-span-8 flex flex-col gap-2.5">
+                    <!-- Animation Track -->
+                    <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-2.5 flex-1 flex flex-col justify-between relative overflow-hidden">
+                        <div class="flex justify-between items-center px-1.5" style="display: flex; justify-content: space-between;">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-widest flex items-center gap-1" style="display: flex; align-items: center; gap: 0.25rem;">
+                                <svg class="text-rose-500 animate-pulse" viewBox="0 0 24 24" style="width: 1.25em; height: 1.25em; fill: currentColor;"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg> Visualisasi Lintasan Mobil
+                            </span>
+                            <span class="text-[9px] text-slate-500 italic">Garis kuning vertikal melambangkan jejak Ticker Timer setiap 0.5s</span>
+                        </div>
+                        
+                        <!-- Track Canvas Container -->
+                        <div class="relative w-full h-[110px] bg-slate-950 rounded-lg border border-slate-800 overflow-hidden">
+                            <canvas id="sim-canvas" class="w-full h-full block" style="background-color: #020617; display: block; width: 100%; height: 100%;"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Graphs Grid -->
+                    <div class="grid grid-cols-2 gap-2.5 h-[170px]">
+                        <!-- Graph s-t (Position vs Time) -->
+                        <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-2 flex flex-col justify-between">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1">Grafik Jarak vs Waktu ($s-t$)</span>
+                            <div class="flex-1 bg-slate-950 rounded border border-slate-800/50 relative overflow-hidden mt-1">
+                                <canvas id="chart-s" class="w-full h-full block" style="background-color: #020617; display: block; width: 100%; height: 100%;"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Graph v-t (Velocity vs Time) -->
+                        <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-2 flex flex-col justify-between">
+                            <span class="text-[10px] font-bold text-slate-400 uppercase tracking-wider px-1">Grafik Kecepatan vs Waktu ($v-t$)</span>
+                            <div class="flex-1 bg-slate-950 rounded border border-slate-800/50 relative overflow-hidden mt-1">
+                                <canvas id="chart-v" class="w-full h-full block" style="background-color: #020617; display: block; width: 100%; height: 100%;"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB CONTENT: SOAL (EVALUASI) -->
+        <section id="tab-soal" class="tab-pane hidden h-full w-full">
+            <div class="grid grid-cols-12 gap-3 h-full items-stretch">
+                <!-- Left: Question & Status -->
+                <div class="col-span-8 bg-slate-900/60 border border-slate-800/80 rounded-xl p-4 flex flex-col justify-between">
+                    <div>
+                        <div class="flex justify-between items-center border-b border-slate-800 pb-2 mb-3" style="display: flex; justify-content: space-between; align-items: center;">
+                            <span class="text-xs text-blue-400 font-bold uppercase tracking-widest display-font" id="question-index-lbl">Soal 1 dari 10</span>
+                            <div class="bg-slate-950 px-2 py-0.5 rounded border border-slate-800 text-xs text-slate-400">
+                                Skor Sekarang: <span class="font-bold text-emerald-400" id="current-score-lbl">0</span>
+                            </div>
+                        </div>
+
+                        <!-- Question Prompt -->
+                        <p class="text-xs md:text-sm font-medium leading-relaxed text-slate-100" id="question-text">
+                            Sebuah benda bergerak dengan kecepatan awal 5 m/s dan mengalami percepatan konstan 2 m/s². Berapakah kecepatan benda tersebut setelah bergerak selama 3 detik?
+                        </p>
+
+                        <!-- Options Container -->
+                        <div class="grid grid-cols-1 gap-2 mt-4" id="options-container">
+                            <!-- Options rendered dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Navigation Footer -->
+                    <div class="flex justify-between items-center border-t border-slate-800 pt-3 mt-3" style="display: flex; justify-content: space-between; align-items: center;">
+                        <button id="btn-quiz-prev" onclick="navQuiz(-1)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-3 py-1.5 rounded text-xs flex items-center gap-1.5 border border-slate-700 disabled:opacity-30 disabled:cursor-not-allowed" style="outline: none; cursor: pointer; display: flex; align-items: center; gap: 0.375rem;">
+                            <svg class="icon" viewBox="0 0 24 24" style="width: 1em; height: 1em; fill: currentColor;"><path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/></svg> Sebelumnya
+                        </button>
+                        <button id="btn-quiz-next" onclick="navQuiz(1)" class="bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold px-3 py-1.5 rounded text-xs flex items-center gap-1.5 border border-slate-700 disabled:opacity-30 disabled:cursor-not-allowed" style="outline: none; cursor: pointer; display: flex; align-items: center; gap: 0.375rem;">
+                            Berikutnya <svg class="icon" viewBox="0 0 24 24" style="width: 1em; height: 1em; fill: currentColor;"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Question Nav Matrix & Results Summary -->
+                <div class="col-span-4 bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 flex flex-col justify-between">
+                    <div>
+                        <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider border-b border-slate-800 pb-2 mb-3 flex items-center gap-1.5" style="display: flex; align-items: center; gap: 0.375rem;">
+                            <svg viewBox="0 0 24 24" style="width:1.25em; height:1.25em; fill:currentColor;"><path d="M4 10.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5 1.5-.67 1.5-1.5-.67-1.5-1.5-1.5zm0-6c-.83 0-1.5.67-1.5 1.5S3.17 7.5 4 7.5 5.5 6.83 5.5 6 4.83 4.5 4 4.5zm0 12c-.83 0-1.5.68-1.5 1.5s.68 1.5 1.5 1.5 1.5-.68 1.5-1.5-.67-1.5-1.5-1.5zM7 19h14v-2H7v2zm0-6h14v-2H7v2zm0-8v2h14V5H7z"/></svg> Peta Navigasi Soal
+                        </h3>
+                        <!-- Navigation Matrix -->
+                        <div class="grid grid-cols-5 gap-1.5" id="quiz-matrix">
+                            <!-- 10 Buttons rendered by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Final Score Board -->
+                    <div class="bg-slate-950 p-3 rounded-lg border border-slate-800 flex flex-col justify-center items-center text-center" style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <svg class="text-amber-400" viewBox="0 0 24 24" style="width: 2.5rem; height: 2.5rem; fill: currentColor; margin-bottom: 0.25rem;"><path d="M12 2l3.09 6.3 6.91.95-5 4.86 1.18 6.88-6.18-3.25-6.18 3.25 1.18-6.88-5-4.86 6.91-.95z"/></svg>
+                        <span class="text-[10px] text-slate-400 uppercase tracking-widest">Hasil Kuis Mandiri</span>
+                        <h4 class="text-xl font-bold display-font text-white mt-1" id="quiz-final-score">-- / 100</h4>
+                        <button onclick="resetQuiz()" class="mt-2 text-[10px] bg-indigo-600/20 hover:bg-indigo-600/30 text-indigo-400 border border-indigo-500/30 px-3 py-1 rounded font-bold transition-all" style="cursor: pointer; padding: 0.25rem 0.75rem; outline: none;">
+                            Ulangi Kuis
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB CONTENT: LKPD BERKELOMPOK -->
+        <section id="tab-lkpd" class="tab-pane hidden h-full w-full overflow-hidden flex flex-col justify-between">
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-3 h-full flex flex-col justify-between">
+                <!-- Heading -->
+                <div class="flex justify-between items-center border-b border-slate-800 pb-2 mb-2" style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <h2 class="text-sm font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-blue-400 uppercase tracking-wider flex items-center gap-1.5" style="background: linear-gradient(to right, #2dd4bf, #60a5fa); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.375rem;">
+                            <svg viewBox="0 0 24 24" style="width:1.25em; height:1.25em; fill:currentColor;"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg> Lembar Kerja Peserta Didik (LKPD) - Kelompok
+                        </h2>
+                        <p class="text-[10px] text-slate-400">Lakukan simulasi mandiri dan isi data pengamatan berikut bersama kelompokmu.</p>
+                    </div>
+                    <div class="flex space-x-2" style="display: flex; gap: 0.5rem;">
+                        <input type="text" id="lkpd-group" placeholder="Nama Kelompok" class="bg-slate-950 border border-slate-800 rounded px-2 py-1 text-[11px] text-slate-200 focus:outline-none focus:border-blue-500 w-32">
+                        <button onclick="printLKPD()" class="bg-indigo-600 hover:bg-indigo-500 text-white font-bold px-3 py-1 rounded text-[11px] flex items-center gap-1.5 transition-all" style="cursor: pointer; display: flex; align-items: center; gap: 0.375rem; border: none; color: #ffffff;">
+                            <svg viewBox="0 0 24 24" style="width:1.2em; height:1.2em; fill:currentColor;"><path d="M19 8H5c-1.66 0-3 1.34-3 3v6h4v4h12v-4h4v-6c0-1.66-1.34-3-3-3zm-3 11H8v-5h8v5zm3-7c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1zm-1-9H6v4h12V3z"/></svg> Cetak / Ekspor PDF
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Worksheet Content Box (Two Columns inside) -->
+                <div class="grid grid-cols-12 gap-3 flex-1 overflow-hidden items-stretch">
+                    <!-- Left Column: Table of Observations -->
+                    <div class="col-span-7 bg-slate-950 p-2.5 rounded-lg border border-slate-800/50 flex flex-col justify-between overflow-y-auto">
+                        <div>
+                            <span class="text-[10px] font-semibold text-teal-400 uppercase tracking-widest block mb-1">Tabel Pengamatan (Simulasi GLBB)</span>
+                            <table class="w-full text-[11px] text-slate-300 border-collapse">
+                                <thead>
+                                    <tr class="bg-slate-900/80 text-[10px] uppercase tracking-wider text-slate-400 border-b border-slate-800">
+                                        <th class="p-1 text-center border-r border-slate-800">No.</th>
+                                        <th class="p-1 text-center border-r border-slate-800">$v_0$ ($m/s$)</th>
+                                        <th class="p-1 text-center border-r border-slate-800">$a$ ($m/s^2$)</th>
+                                        <th class="p-1 text-center border-r border-slate-800">Waktu $t$ ($s$)</th>
+                                        <th class="p-1 text-center border-r border-slate-800">Kecepatan $v_t$ ($m/s$)</th>
+                                        <th class="p-1 text-center">Posisi $s$ ($m$)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr class="border-b border-slate-900">
+                                        <td class="p-1 text-center text-slate-500 font-bold">1</td>
+                                        <td class="p-1"><input type="number" id="lkpd-v0-1" value="5" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-a-1" value="2" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-t-1" value="3" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-vt-1" value="11" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-s-1" value="24" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                    </tr>
+                                    <tr class="border-b border-slate-900">
+                                        <td class="p-1 text-center text-slate-500 font-bold">2</td>
+                                        <td class="p-1"><input type="number" id="lkpd-v0-2" value="10" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-a-2" value="-1.5" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-t-2" value="4" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-vt-2" value="4" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-s-2" value="28" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                    </tr>
+                                    <tr class="border-b border-slate-900">
+                                        <td class="p-1 text-center text-slate-500 font-bold">3</td>
+                                        <td class="p-1"><input type="number" id="lkpd-v0-3" value="0" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-a-3" value="3" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-t-3" value="5" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-vt-3" value="15" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                        <td class="p-1"><input type="number" id="lkpd-s-3" value="37.5" class="w-full bg-slate-900/60 border border-slate-800 rounded px-1 py-0.5 text-center text-slate-200"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="mt-2 text-[10px] text-amber-400 bg-amber-500/10 border border-amber-500/20 p-2 rounded leading-tight" style="display: flex; align-items: center; gap: 0.5rem;">
+                            <svg viewBox="0 0 24 24" style="width:1.5em; height:1.5em; fill:currentColor; flex-shrink: 0;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/></svg>
+                            <span>Gunakan tab <strong>Simulasi</strong> untuk mencari nilai di atas, sesuaikan variabel masukan dan jeda waktu ($t$) yang diinginkan untuk dicatat.</span>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Analysis Questions -->
+                    <div class="col-span-5 bg-slate-950 p-2.5 rounded-lg border border-slate-800/50 flex flex-col justify-between overflow-y-auto">
+                        <div class="space-y-3">
+                            <span class="text-[10px] font-semibold text-teal-400 uppercase tracking-widest block">Analisis & Diskusi</span>
+                            
+                            <div>
+                                <label class="text-[11px] text-slate-300 font-medium block mb-1">1. Bagaimana pengaruh tanda (+/-) percepatan terhadap grafik kecepatan-waktu?</label>
+                                <textarea id="lkpd-q1" rows="2" style="width: 100%; resize: none;" placeholder="Tuliskan analisis kelompok Anda disini..."></textarea>
+                            </div>
+
+                            <div>
+                                <label class="text-[11px] text-slate-300 font-medium block mb-1">2. Tarik kesimpulan mengenai hubungan antara jarak dengan waktu tempuh pada GLBB:</label>
+                                <textarea id="lkpd-q2" rows="2" style="width: 100%; resize: none;" placeholder="Tuliskan kesimpulan kelompok Anda disini..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB CONTENT: PENGEMBANG -->
+        <section id="tab-pengembang" class="tab-pane hidden h-full w-full">
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-xl p-5 h-full flex flex-col justify-between">
+                <div>
+                    <h2 class="text-xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-white to-slate-400 flex items-center gap-2" style="background: linear-gradient(to right, #ffffff, #94a3b8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; display: flex; align-items: center; gap: 0.5rem;">
+                        <svg viewBox="0 0 24 24" style="width:1.25em; height:1.25em; fill:currentColor; color: #818cf8;"><path d="M19.14 12.94c.04-.3.06-.61.06-.94 0-.32-.02-.64-.07-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5,-3.8-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.05.3-.09.63-.09.94s.02.64.07.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/></svg> Informasi Pengembang
+                    </h2>
+                    <p class="text-slate-400 text-xs mt-1">Platform Lab Maya interaktif Fisika untuk pembelajaran inovatif Fase F SMA.</p>
+                </div>
+
+                <div class="grid grid-cols-12 gap-5 my-4 flex-1 items-center">
+                    <!-- Developer Photo Frame (Background Blended & Proportional) -->
+                    <div class="col-span-5 flex flex-col items-center justify-center text-center border-r border-slate-800/80 pr-5" style="border-right: 1px solid rgba(30,41,59,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center;">
+                        <div class="relative w-44 h-44 md:w-48 md:h-48 rounded-full bg-gradient-to-br from-blue-500 via-indigo-600 to-purple-700 p-1 shadow-2xl shadow-indigo-500/30 overflow-hidden" style="width: 12rem; height: 12rem; border-radius: 50%; padding: 4px; background: linear-gradient(135deg, #3b82f6, #4f46e5, #8b5cf6); position: relative; overflow: hidden;">
+                            <!-- Inner Container with deep theme background -->
+                            <div class="relative w-full h-full bg-[#0b0f19] rounded-full overflow-hidden flex items-center justify-center" style="width: 100%; height: 100%; border-radius: 50%; position: relative; background-color: #0b0f19; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                                <img src="80787187_582770125848154_381138889655451648_n.jpg" 
+                                     alt="Foto Eko Wahyu Santiko, S.Pd." 
+                                     class="w-full h-full object-cover object-top scale-110 translate-y-3 contrast-[1.04] brightness-[1.02] saturate-[0.98]"
+                                     style="width: 100%; height: 100%; object-fit: cover; object-position: top; transform: scale(1.1) translateY(8px); filter: contrast(1.04) brightness(1.02) saturate(0.98);"
+                                     onerror="this.style.display='none'; document.getElementById('dev-fallback-avatar').style.display='flex';">
+                                
+                                <!-- Standalone Vector Fallback if local photo is not found offline -->
+                                <div id="dev-fallback-avatar" class="hidden w-full h-full flex flex-col items-center justify-center bg-slate-950" style="display: none; width: 100%; height: 100%; border-radius: 50%; background-color: #020617; flex-direction: column; align-items: center; justify-content: center;">
+                                    <svg viewBox="0 0 24 24" class="text-indigo-400" style="width: 4rem; height: 4rem; fill: currentColor;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                                </div>
+
+                                <!-- Advanced Ambient Vignette Mask to cleanly black out original shutter background -->
+                                <div class="absolute inset-0" style="position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(circle at 50% 40%, transparent 28%, #0b0f19 72%); pointer-events: none;"></div>
+                            </div>
+                        </div>
+                        <h3 class="text-base font-bold mt-4 text-slate-100 display-font tracking-wide">Eko Wahyu Santiko, S.Pd.</h3>
+                        <p class="text-xs text-indigo-400 uppercase tracking-widest font-extrabold tech-font">Guru Fisika - SMA N 3 Semarang</p>
+                    </div>
+
+                    <!-- Tech Stack & Description Card (Glassmorphism style) -->
+                    <div class="col-span-7 space-y-4 bg-slate-950/60 p-5 rounded-2xl border border-slate-800/50">
+                        <div>
+                            <span class="bg-indigo-500/10 text-indigo-400 border border-indigo-500/20 px-2 py-0.5 rounded-full text-[9px] font-bold uppercase tracking-wider" style="padding: 0.125rem 0.5rem; border-radius: 9999px;">
+                                Visi Edukasi Digital
+                            </span>
+                            <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1.5 mt-2">Komitmen Pengajaran Inovatif</h4>
+                            <p class="text-xs text-slate-400 leading-relaxed">
+                                Media simulasi virtual ini dirancang oleh praktisi pendidikan untuk mengatasi keterbatasan alat laboratorium riil di sekolah. Dengan visualisasi waktu nyata dan generator suara berbasis sintesis frekuensi, siswa dapat mendalami konsep kinematika secara intuitif, kolaboratif, serta mandiri.
+                            </p>
+                        </div>
+
+                        <div>
+                            <h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-2">Spesifikasi Lab Maya</h4>
+                            <div class="flex flex-wrap gap-2" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">
+                                <span class="bg-slate-950 text-[10px] px-2.5 py-1 rounded-lg border border-slate-800 text-slate-400" style="padding: 0.25rem 0.5rem; border-radius: 0.5rem; border: 1px solid #1e293b;"><strong class="text-blue-400">Core Engine:</strong> JS Canvas & Physics Logic</span>
+                                <span class="bg-slate-950 text-[10px] px-2.5 py-1 rounded-lg border border-slate-800 text-slate-400" style="padding: 0.25rem 0.5rem; border-radius: 0.5rem; border: 1px solid #1e293b;"><strong class="text-indigo-400">Styling:</strong> Pure CSS Built-in Emulator</span>
+                                <span class="bg-slate-950 text-[10px] px-2.5 py-1 rounded-lg border border-slate-800 text-slate-400" style="padding: 0.25rem 0.5rem; border-radius: 0.5rem; border: 1px solid #1e293b;"><strong class="text-emerald-400">Audio:</strong> Web Audio API Synth</span>
+                                <span class="bg-slate-950 text-[10px] px-2.5 py-1 rounded-lg border border-slate-800 text-slate-400" style="padding: 0.25rem 0.5rem; border-radius: 0.5rem; border: 1px solid #1e293b;"><strong class="text-rose-400">Standard:</strong> Kurikulum Merdeka Fase F</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-slate-950/80 border border-slate-800/80 p-3 rounded-lg text-center text-[10px] text-slate-500" style="text-align: center;">
+                    &copy; 2026 Laboratorium Maya Fisika SMA - Semua Hak Cipta Dilindungi.
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER STATUS BAR -->
+    <footer class="bg-slate-900/90 border border-slate-800 rounded-xl px-4 py-2 flex justify-between items-center h-[8%]">
+        <div class="flex items-center space-x-2 text-[10px] md:text-xs text-slate-400" style="display: flex; align-items: center; gap: 0.5rem;">
+            <span class="flex items-center gap-1.5 text-emerald-400" style="display: flex; align-items: center; gap: 0.375rem;">
+                <svg class="animate-pulse" style="width: 1em; height: 1em; fill: currentColor;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg> 
+                Sistem Siap (100% Offline Standalone)
+            </span>
+            <span class="text-slate-600">|</span>
+            <span>Audio: <strong class="text-slate-300 font-semibold uppercase">Web Audio API Synth</strong></span>
+        </div>
+        <div class="flex items-center space-x-2 text-[10px] md:text-xs">
+            <span class="text-slate-500">Gunakan browser modern untuk performa terbaik (Rekomendasi 16:9)</span>
+        </div>
+    </footer>
+
+    <!-- INTERACTIVE JAVASCRIPT & SIMULATION CODE -->
+    <script>
+        // Tab switching logic
+        function switchTab(tabId) {
+            sfx.playClick();
+            document.querySelectorAll('.tab-pane').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.className = 'tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-slate-400';
+                btn.style.backgroundColor = 'transparent';
+                btn.style.border = 'none';
+                btn.style.color = '#94a3b8';
+            });
+
+            const activeBtn = document.getElementById(`btn-${tabId}`);
+            if (activeBtn) {
+                activeBtn.className = 'tab-btn px-3 py-1.5 rounded-lg text-xs md:text-sm font-semibold transition-all duration-300 flex items-center gap-1.5 text-blue-400';
+                activeBtn.style.backgroundColor = 'rgba(59, 130, 246, 0.1)';
+                activeBtn.style.border = '1px solid rgba(59, 130, 246, 0.2)';
+                activeBtn.style.color = '#60a5fa';
+            }
+
+            // Trigger canvas resizing if switching to simulation
+            if (tabId === 'simulasi') {
+                setTimeout(() => {
+                    initCanvases();
+                }, 50);
+            }
+        }
+
+        // --- SPLASH SCREEN LOGIC ---
+        let loadProgress = 0;
+        function simulateLoading() {
+            const interval = setInterval(() => {
+                loadProgress += Math.floor(Math.random() * 8) + 6;
+                if (loadProgress >= 100) {
+                    loadProgress = 100;
+                    clearInterval(interval);
+                    onLoadingComplete();
+                }
+                document.getElementById('loading-bar').style.width = loadProgress + '%';
+                document.getElementById('loading-text').innerText = `Menginisialisasi Lab: ${loadProgress}%`;
+                
+                // Play a tiny tick during progress steps
+                if (loadProgress % 18 === 0 || loadProgress % 14 === 0) {
+                    sfx.playTick();
+                }
+            }, 100);
+        }
+
+        function onLoadingComplete() {
+            sfx.playSuccess();
+            document.getElementById('loading-container').classList.add('hidden');
+            const startBtnCont = document.getElementById('start-btn-container');
+            startBtnCont.classList.remove('hidden');
+            setTimeout(() => {
+                startBtnCont.classList.remove('opacity-0', 'translate-y-4');
+            }, 50);
+        }
+
+        function dismissSplash() {
+            sfx.playStartup();
+            const splash = document.getElementById('splash-screen');
+            splash.classList.add('transition-all', 'duration-700', 'opacity-0', 'pointer-events-none', 'scale-105');
+            setTimeout(() => {
+                splash.remove();
+                // Initialize the main lab visual components once splash screen disappears
+                initCanvases();
+            }, 700);
+        }
+
+        // --- SIMULATION PHYSICS ENGINE ---
+        let simCanvas, simCtx;
+        let chartSCanvas, chartSCtx;
+        let chartVCanvas, chartVCtx;
+
+        let isRunning = false;
+        let animFrameId = null;
+
+        // Physics State Variables
+        let v0 = 5;       // m/s
+        let a = 1.5;      // m/s^2
+        let t = 0;        // current elapsed time in seconds
+        let x = 0;        // position in meters (starting x=0 on track)
+        let v = 5;        // current velocity
+
+        const maxTime = 10; // Max duration of simulation
+        const trackLength = 100; // Physical length of track in meters
+
+        // History arrays for graphing
+        let timeHistory = [];
+        let posHistory = [];
+        let velHistory = [];
+        let tickerTimers = []; // Timestamps of ticker tape marks (every 0.5s)
+
+        function initCanvases() {
+            simCanvas = document.getElementById('sim-canvas');
+            if (simCanvas) {
+                simCanvas.width = simCanvas.parentElement.clientWidth;
+                simCanvas.height = simCanvas.parentElement.clientHeight;
+                simCtx = simCanvas.getContext('2d');
+            }
+
+            chartSCanvas = document.getElementById('chart-s');
+            if (chartSCanvas) {
+                chartSCanvas.width = chartSCanvas.parentElement.clientWidth;
+                chartSCanvas.height = chartSCanvas.parentElement.clientHeight;
+                chartSCtx = chartSCanvas.getContext('2d');
+            }
+
+            chartVCanvas = document.getElementById('chart-v');
+            if (chartVCanvas) {
+                chartVCanvas.width = chartVCanvas.parentElement.clientWidth;
+                chartVCanvas.height = chartVCanvas.parentElement.clientHeight;
+                chartVCtx = chartVCanvas.getContext('2d');
+            }
+
+            drawSimTrack();
+            drawStaticCharts();
+        }
+
+        function updateSimParams() {
+            v0 = parseFloat(document.getElementById('input-v0').value);
+            a = parseFloat(document.getElementById('input-a').value);
+            
+            document.getElementById('val-v0').innerText = v0 + ' m/s';
+            document.getElementById('val-a').innerText = (a >= 0 ? '+' : '') + a + ' m/s²';
+
+            // Determine motion mode badge
+            const badgeEl = document.getElementById('mode-badge');
+            if (a > 0) {
+                badgeEl.innerText = "GLBB Dipercepat";
+                badgeEl.className = "font-bold uppercase tracking-wider text-xs text-emerald-400";
+            } else if (a < 0) {
+                badgeEl.innerText = "GLBB Diperlambat";
+                badgeEl.className = "font-bold uppercase tracking-wider text-xs text-rose-400";
+            } else {
+                badgeEl.innerText = "GLB (Konstan)";
+                badgeEl.className = "font-bold uppercase tracking-wider text-xs text-blue-400";
+            }
+
+            if (!isRunning && t === 0) {
+                v = v0;
+                x = 0;
+                document.getElementById('sim-vel').innerText = v.toFixed(2) + ' m/s';
+                document.getElementById('sim-pos').innerText = x.toFixed(2) + ' m';
+                drawSimTrack();
+            }
+        }
+
+        // Simple customized canvas drawer for graphs
+        function drawStaticCharts() {
+            if (!chartSCtx || !chartVCtx) return;
+
+            // Clear
+            chartSCtx.clearRect(0, 0, chartSCanvas.width, chartSCanvas.height);
+            chartVCtx.clearRect(0, 0, chartVCanvas.width, chartVCanvas.height);
+
+            // Draw empty grid lines for S-T
+            chartSCtx.strokeStyle = '#1e293b';
+            chartSCtx.lineWidth = 1;
+            for (let i = 1; i < 5; i++) {
+                let y = (chartSCanvas.height / 5) * i;
+                chartSCtx.beginPath();
+                chartSCtx.moveTo(0, y);
+                chartSCtx.lineTo(chartSCanvas.width, y);
+                chartSCtx.stroke();
+            }
+
+            // Draw empty grid lines for V-T
+            chartVCtx.strokeStyle = '#1e293b';
+            chartVCtx.lineWidth = 1;
+            for (let i = 1; i < 5; i++) {
+                let y = (chartVCanvas.height / 5) * i;
+                chartVCtx.beginPath();
+                chartVCtx.moveTo(0, y);
+                chartVCtx.lineTo(chartVCanvas.width, y);
+                chartVCtx.stroke();
+            }
+        }
+
+        function drawSimTrack() {
+            if (!simCtx) return;
+            const w = simCanvas.width;
+            const h = simCanvas.height;
+            simCtx.clearRect(0, 0, w, h);
+
+            // Draw Road Track
+            const roadY = h - 45;
+            simCtx.fillStyle = '#0f172a';
+            simCtx.fillRect(0, roadY, w, 25);
+
+            // Draw dashed road separator
+            simCtx.strokeStyle = '#475569';
+            simCtx.setLineDash([8, 12]);
+            simCtx.lineWidth = 2;
+            simCtx.beginPath();
+            simCtx.moveTo(0, roadY + 12);
+            simCtx.lineTo(w, roadY + 12);
+            simCtx.stroke();
+            simCtx.setLineDash([]); // Reset line dash
+
+            // Draw Track Boundary line (Solid Bottom)
+            simCtx.strokeStyle = '#334155';
+            simCtx.lineWidth = 3;
+            simCtx.beginPath();
+            simCtx.moveTo(0, roadY + 25);
+            simCtx.lineTo(w, roadY + 25);
+            simCtx.stroke();
+
+            // Draw Ruler ticks (meters marker 0 to 100m)
+            simCtx.fillStyle = '#94a3b8';
+            simCtx.font = '9px monospace';
+            simCtx.textAlign = 'center';
+            const numTicks = 10;
+            for (let i = 0; i <= numTicks; i++) {
+                const tickX = (w - 60) * (i / numTicks) + 30;
+                const meterVal = (trackLength * (i / numTicks)).toFixed(0);
+                
+                simCtx.strokeStyle = '#475569';
+                simCtx.lineWidth = 1.5;
+                simCtx.beginPath();
+                simCtx.moveTo(tickX, roadY + 25);
+                simCtx.lineTo(tickX, roadY + 32);
+                simCtx.stroke();
+
+                simCtx.fillText(meterVal + 'm', tickX, roadY + 43);
+            }
+
+            // Draw Ticker Tape Marks (yellow vertical bars in the sky)
+            tickerTimers.forEach(tick => {
+                const tickX = (w - 60) * (tick.x / trackLength) + 30;
+                simCtx.strokeStyle = 'rgba(234, 179, 8, 0.4)';
+                simCtx.lineWidth = 2;
+                simCtx.beginPath();
+                simCtx.moveTo(tickX, roadY - 45);
+                simCtx.lineTo(tickX, roadY);
+                simCtx.stroke();
+
+                // Small tick label
+                simCtx.fillStyle = 'rgba(234, 179, 8, 0.7)';
+                simCtx.font = '8px monospace';
+                simCtx.fillText(tick.t.toFixed(1) + 's', tickX, roadY - 50);
+            });
+
+            // Map Physical Position (x: 0m to 100m) to Canvas pixels
+            const carPixelX = (w - 60) * (x / trackLength) + 30;
+
+            // Draw Vector Indicators on Car (Velocity in blue/emerald, acceleration in rose)
+            if (t > 0 || isRunning) {
+                // Velocity vector
+                const velLength = Math.max(10, Math.min(60, Math.abs(v) * 2.5));
+                if (v !== 0) {
+                    const arrowDir = v > 0 ? 1 : -1;
+                    const arrowX = carPixelX + (arrowDir * velLength);
+                    simCtx.strokeStyle = '#10b981'; // Emerald
+                    simCtx.lineWidth = 3;
+                    simCtx.beginPath();
+                    simCtx.moveTo(carPixelX, roadY - 20);
+                    simCtx.lineTo(arrowX, roadY - 20);
+                    // Arrowhead
+                    simCtx.lineTo(arrowX - arrowDir * 6, roadY - 24);
+                    simCtx.moveTo(arrowX, roadY - 20);
+                    simCtx.lineTo(arrowX - arrowDir * 6, roadY - 16);
+                    simCtx.stroke();
+
+                    simCtx.fillStyle = '#10b981';
+                    simCtx.font = 'bold 9px sans-serif';
+                    simCtx.fillText('v = ' + v.toFixed(1) + ' m/s', carPixelX, roadY - 30);
+                }
+
+                // Acceleration vector
+                if (a !== 0) {
+                    const accLength = Math.abs(a) * 12;
+                    const arrowDir = a > 0 ? 1 : -1;
+                    const arrowX = carPixelX + (arrowDir * accLength);
+                    simCtx.strokeStyle = '#f43f5e'; // Rose
+                    simCtx.lineWidth = 3;
+                    simCtx.beginPath();
+                    simCtx.moveTo(carPixelX, roadY + 5);
+                    simCtx.lineTo(arrowX, roadY + 5);
+                    // Arrowhead
+                    simCtx.lineTo(arrowX - arrowDir * 6, roadY + 1);
+                    simCtx.moveTo(arrowX, roadY + 5);
+                    simCtx.lineTo(arrowX - arrowDir * 6, roadY + 9);
+                    simCtx.stroke();
+
+                    simCtx.fillStyle = '#f43f5e';
+                    simCtx.font = 'bold 9px sans-serif';
+                    simCtx.fillText('a = ' + (a > 0 ? '+' : '') + a.toFixed(1) + ' m/s²', carPixelX, roadY + 18);
+                }
+            }
+
+            // Draw Animated Car
+            const carW = 34;
+            const carH = 16;
+            const carY = roadY - carH;
+
+            // Draw Car body
+            simCtx.fillStyle = 'rgba(59, 130, 246, 0.95)'; // Glowing Neon Blue
+            simCtx.beginPath();
+            simCtx.roundRect(carPixelX - carW/2, carY, carW, carH, 4);
+            simCtx.fill();
+
+            // Glow effect
+            simCtx.strokeStyle = 'rgba(96, 165, 250, 0.5)';
+            simCtx.lineWidth = 1.5;
+            simCtx.stroke();
+
+            // Cabin/Windshield
+            simCtx.fillStyle = '#1e293b';
+            simCtx.beginPath();
+            simCtx.roundRect(carPixelX - carW/5, carY + 2, carW/3, carH/2.5, 2);
+            simCtx.fill();
+
+            // Wheels
+            simCtx.fillStyle = '#1e293b';
+            simCtx.strokeStyle = '#94a3b8';
+            simCtx.lineWidth = 1;
+            // Rear Wheel
+            simCtx.beginPath();
+            simCtx.arc(carPixelX - carW/3, roadY, 5, 0, Math.PI * 2);
+            simCtx.fill();
+            simCtx.stroke();
+            // Front Wheel
+            simCtx.beginPath();
+            simCtx.arc(carPixelX + carW/3, roadY, 5, 0, Math.PI * 2);
+            simCtx.fill();
+            simCtx.stroke();
+        }
+
+        // Live Dynamic Graphing using Custom Engine
+        function renderGraphs() {
+            if (!chartSCtx || !chartVCtx) return;
+
+            // Plotting S-T Graph
+            chartSCtx.clearRect(0, 0, chartSCanvas.width, chartSCanvas.height);
+            drawStaticCharts();
+
+            if (timeHistory.length > 0) {
+                chartSCtx.strokeStyle = '#3b82f6';
+                chartSCtx.lineWidth = 3.5;
+                chartSCtx.beginPath();
+                
+                for (let i = 0; i < timeHistory.length; i++) {
+                    const normX = (timeHistory[i] / maxTime) * (chartSCanvas.width - 20) + 10;
+                    const normY = chartSCanvas.height - 15 - (posHistory[i] / 100) * (chartSCanvas.height - 30);
+                    
+                    if (i === 0) {
+                        chartSCtx.moveTo(normX, normY);
+                    } else {
+                        chartSCtx.lineTo(normX, normY);
+                    }
+                }
+                chartSCtx.stroke();
+            }
+
+            // Plotting V-T Graph
+            chartVCtx.clearRect(0, 0, chartVCanvas.width, chartVCanvas.height);
+            drawStaticCharts();
+
+            if (timeHistory.length > 0) {
+                chartVCtx.strokeStyle = '#10b981';
+                chartVCtx.lineWidth = 3.5;
+                chartVCtx.beginPath();
+
+                for (let i = 0; i < timeHistory.length; i++) {
+                    const normX = (timeHistory[i] / maxTime) * (chartVCanvas.width - 20) + 10;
+                    const normY = chartVCanvas.height - 15 - (velHistory[i] / 30) * (chartVCanvas.height - 30);
+                    
+                    if (i === 0) {
+                        chartVCtx.moveTo(normX, normY);
+                    } else {
+                        chartVCtx.lineTo(normX, normY);
+                    }
+                }
+                chartVCtx.stroke();
+            }
+        }
+
+        let lastTime = 0;
+        let tickerIntervalCount = 0;
+
+        function runSimLoop(timestamp) {
+            if (!isRunning) return;
+
+            if (!lastTime) lastTime = timestamp;
+            const dt = (timestamp - lastTime) / 1000;
+            lastTime = timestamp;
+
+            const delta = Math.min(dt, 0.05);
+
+            // GLBB Physics calculations
+            t += delta;
+            v = v0 + (a * t);
+            x = (v0 * t) + (0.5 * a * t * t);
+
+            let shouldStop = false;
+
+            if (x >= trackLength) {
+                x = trackLength;
+                v = v0 + (a * Math.sqrt((2*trackLength)/a));
+                shouldStop = true;
+            } else if (x < 0) {
+                x = 0;
+                v = 0;
+                shouldStop = true;
+            }
+
+            if (t >= maxTime) {
+                t = maxTime;
+                shouldStop = true;
+            }
+
+            if (a < 0 && v <= 0) {
+                v = 0;
+                const stopTime = -v0 / a;
+                t = stopTime;
+                x = (v0 * stopTime) + (0.5 * a * stopTime * stopTime);
+                shouldStop = true;
+            }
+
+            timeHistory.push(t);
+            posHistory.push(x);
+            velHistory.push(v);
+
+            const expectedTickers = Math.floor(t / 0.5);
+            if (expectedTickers > tickerIntervalCount) {
+                tickerTimers.push({ t: expectedTickers * 0.5, x: x });
+                tickerIntervalCount = expectedTickers;
+                sfx.playTick();
+            }
+
+            document.getElementById('sim-time').innerText = t.toFixed(2) + ' s';
+            document.getElementById('sim-pos').innerText = x.toFixed(2) + ' m';
+            document.getElementById('sim-vel').innerText = v.toFixed(2) + ' m/s';
+
+            drawSimTrack();
+            renderGraphs();
+
+            if (shouldStop) {
+                stopSim();
+            } else {
+                animFrameId = requestAnimationFrame(runSimLoop);
+            }
+        }
+
+        function toggleSim() {
+            sfx.playClick();
+            if (isRunning) {
+                stopSim();
+            } else {
+                if (t >= maxTime || x >= trackLength || (a < 0 && v <= 0)) {
+                    resetSim();
+                }
+                isRunning = true;
+                lastTime = 0;
+                document.getElementById('btn-play').innerHTML = '<svg class="icon" viewBox="0 0 24 24" style="width: 1em; height: 1em; fill: currentColor;"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg> <span>Pause</span>';
+                document.getElementById('btn-play').className = "bg-amber-600 hover:bg-amber-500 text-white font-bold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-all";
+                animFrameId = requestAnimationFrame(runSimLoop);
+            }
+        }
+
+        function stopSim() {
+            isRunning = false;
+            if (animFrameId) cancelAnimationFrame(animFrameId);
+            document.getElementById('btn-play').innerHTML = '<svg class="icon" viewBox="0 0 24 24" style="width: 1em; height: 1em; fill: currentColor;"><path d="M8 5v14l11-7z"/></svg> <span>Mulai</span>';
+            document.getElementById('btn-play').className = "bg-emerald-600 hover:bg-emerald-500 text-white font-bold py-2 px-3 rounded-lg text-xs flex items-center justify-center gap-1.5 transition-all";
+        }
+
+        function resetSim() {
+            sfx.playReset();
+            stopSim();
+            t = 0;
+            x = 0;
+            v = v0;
+            tickerIntervalCount = 0;
+            timeHistory = [];
+            posHistory = [];
+            velHistory = [];
+            tickerTimers = [];
+
+            document.getElementById('sim-time').innerText = '0.00 s';
+            document.getElementById('sim-pos').innerText = '0.00 m';
+            document.getElementById('sim-vel').innerText = v0.toFixed(2) + ' m/s';
+
+            drawSimTrack();
+            drawStaticCharts();
+        }
+
+
+        // --- INTERACTIVE EVALUASI (10 SOAL MULTIPLE CHOICE) ---
+        const quizQuestions = [
+            {
+                q: "Sebuah mobil mainan bergerak dari keadaan diam dengan percepatan tetap 2 m/s². Kecepatan mobil setelah bergerak selama 5 detik adalah...",
+                opts: ["5 m/s", "8 m/s", "10 m/s", "15 m/s", "20 m/s"],
+                correct: 2,
+                exp: "vt = v0 + at = 0 + (2 * 5) = 10 m/s"
+            },
+            {
+                q: "Benda yang mula-mula bergerak dengan kecepatan 4 m/s tiba-tiba dipercepat dengan percepatan konstan 1.5 m/s². Jarak yang ditempuh benda dalam waktu 4 detik adalah...",
+                opts: ["12 m", "16 m", "20 m", "28 m", "36 m"],
+                correct: 3,
+                exp: "s = v0*t + 0.5*a*t^2 = 4*4 + 0.5*1.5*16 = 16 + 12 = 28 m"
+            },
+            {
+                q: "Sebuah bus direm dengan perlambatan konstan sebesar 2 m/s² dari kecepatan awal 20 m/s hingga berhenti. Waktu yang dibutuhkan bus sampai berhenti adalah...",
+                opts: ["5 detik", "10 detik", "15 detik", "20 detik", "25 detik"],
+                correct: 1,
+                exp: "t = (vt - v0) / a = (0 - 20) / -2 = 10 detik"
+            },
+            {
+                q: "Grafik berikut melambangkan hubungan kecepatan (v) terhadap waktu (t) pada gerak lurus berubah beraturan dipercepat. Kurva yang terbentuk berupa...",
+                opts: [
+                    "Garis lurus horizontal sejajar sumbu waktu",
+                    "Garis lurus diagonal naik ke kanan atas",
+                    "Garis lurus diagonal turun ke kanan bawah",
+                    "Garis melengkung parabola menghadap ke atas",
+                    "Garis vertikal tegak lurus sumbu t"
+                ],
+                correct: 1,
+                exp: "Karena percepatan positif konstan, kurva v-t merupakan fungsi linear naik secara konstan."
+            },
+            {
+                q: "Sebuah pesawat lepas landas dari posisi diam dan harus mencapai kecepatan 60 m/s dalam landasan pacu sepanjang 300 m. Percepatan minimal pesawat tersebut adalah...",
+                opts: ["2 m/s²", "4 m/s²", "6 m/s²", "8 m/s²", "10 m/s²"],
+                correct: 2,
+                exp: "vt^2 = v0^2 + 2as -> 60^2 = 0 + 2*a*300 -> 3600 = 600a -> a = 6 m/s²"
+            },
+            {
+                q: "Dua buah benda bergerak lurus dengan persamaan posisi masing-masing sA = 2t² dan sB = 4t. Kapankah kedua benda berada di posisi yang sama jika berangkat dari titik awal yang sama?",
+                opts: ["0.5 detik", "1 detik", "1.5 detik", "2 detik", "3 detik"],
+                correct: 3,
+                exp: "sA = sB -> 2t² = 4t -> 2t = 4 -> t = 2 detik"
+            },
+            {
+                q: "Sebuah kelapa jatuh bebas dari tangkainya yang setinggi 20 meter di atas tanah. Jika gravitasi bumi 10 m/s², kecepatan kelapa saat menyentuh tanah adalah...",
+                opts: ["10 m/s", "15 m/s", "20 m/s", "25 m/s", "30 m/s"],
+                correct: 2,
+                exp: "vt = sqrt(2gh) = sqrt(2 * 10 * 20) = sqrt(400) = 20 m/s"
+            },
+            {
+                q: "Berikut ini yang merupakan ciri utama dari Gerak Lurus Berubah Beraturan (GLBB) adalah...",
+                opts: [
+                    "Kecepatannya selalu bernilai nol sepanjang waktu",
+                    "Percepatannya berubah secara eksponensial",
+                    "Kecepatannya berubah secara teratur dan percepatannya tetap",
+                    "Arah gerakannya berputar searah jarum jam",
+                    "Lintasannya berupa lingkaran sempurna"
+                ],
+                correct: 2,
+                exp: "Ciri utama GLBB adalah nilai percepatannya konstan (a = konstan) sehingga kecepatan berubah secara teratur."
+            },
+            {
+                q: "Sebuah mobil mula-mula bergerak dengan kecepatan 15 m/s, kemudian dipercepat sebesar 4 m/s² selama 5 detik. Jarak yang ditempuh mobil selama percepatan tersebut adalah...",
+                opts: ["75 m", "100 m", "125 m", "150 m", "175 m"],
+                correct: 2,
+                exp: "s = v0*t + 0.5*a*t^2 = 15*5 + 0.5*4*25 = 75 + 50 = 125 m"
+            },
+            {
+                q: "Sebuah benda bergerak dengan kecepatan awal v0 = 8 m/s dan diperlambat sebesar 2 m/s². Benda tersebut akan berhenti total setelah menempuh jarak...",
+                opts: ["8 m", "12 m", "16 m", "20 m", "24 m"],
+                correct: 2,
+                exp: "vt^2 = v0^2 + 2as -> 0 = 64 + 2(-2)s -> 4s = 64 -> s = 16 meter"
+            }
+        ];
+
+        let quizUserAnswers = Array(10).fill(null);
+        let activeQuizIdx = 0;
+
+        function loadQuizQuestion() {
+            const qObj = quizQuestions[activeQuizIdx];
+            document.getElementById('question-index-lbl').innerText = `Soal ${activeQuizIdx + 1} dari 10`;
+            document.getElementById('question-text').innerText = qObj.q;
+
+            const optCont = document.getElementById('options-container');
+            optCont.innerHTML = '';
+
+            const alphabet = ['A', 'B', 'C', 'D', 'E'];
+            qObj.opts.forEach((opt, idx) => {
+                const isSelected = quizUserAnswers[activeQuizIdx] === idx;
+                const optBtn = document.createElement('button');
+                optBtn.className = `w-full text-left p-3 rounded-lg text-xs md:text-sm border transition-all duration-200 flex items-center justify-between ${
+                    isSelected 
+                    ? 'bg-indigo-600/20 border-indigo-500 text-indigo-300 font-semibold shadow-md shadow-indigo-500/10' 
+                    : 'bg-slate-950/60 border-slate-800 text-slate-300 hover:bg-slate-900/60 hover:border-slate-700'
+                }`;
+                optBtn.onclick = () => selectQuizAnswer(idx);
+                optBtn.innerHTML = `
+                    <span class="flex items-center gap-3" style="display:flex; align-items:center; gap: 0.75rem;">
+                        <span class="w-6 h-6 rounded-md flex items-center justify-center font-bold text-xs" style="width:1.5rem; height:1.5rem; display:flex; align-items:center; justify-content:center; border-radius:0.375rem; font-weight:700; ${isSelected ? 'background-color:#4f46e5; color:#ffffff;' : 'background-color:#1e293b; color:#94a3b8;'}">${alphabet[idx]}</span>
+                        <span>${opt}</span>
+                    </span>
+                    ${isSelected ? '<svg style="width:1.25rem; height:1.25rem; fill:#818cf8;" viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></svg>' : ''}
+                `;
+                optCont.appendChild(optBtn);
+            });
+
+            document.getElementById('btn-quiz-prev').disabled = activeQuizIdx === 0;
+            document.getElementById('btn-quiz-next').disabled = activeQuizIdx === quizQuestions.length - 1;
+
+            updateQuizMatrix();
+        }
+
+        function selectQuizAnswer(idx) {
+            quizUserAnswers[activeQuizIdx] = idx;
+            sfx.playClick();
+            loadQuizQuestion();
+            calculateQuizScore();
+        }
+
+        function navQuiz(dir) {
+            sfx.playClick();
+            activeQuizIdx += dir;
+            if (activeQuizIdx < 0) activeQuizIdx = 0;
+            if (activeQuizIdx >= quizQuestions.length) activeQuizIdx = quizQuestions.length - 1;
+            loadQuizQuestion();
+        }
+
+        function jumpToQuiz(idx) {
+            sfx.playClick();
+            activeQuizIdx = idx;
+            loadQuizQuestion();
+        }
+
+        function updateQuizMatrix() {
+            const matrix = document.getElementById('quiz-matrix');
+            matrix.innerHTML = '';
+
+            for (let i = 0; i < quizQuestions.length; i++) {
+                const isAnswered = quizUserAnswers[i] !== null;
+                const isActive = activeQuizIdx === i;
+                
+                let btnStyle = "bg-slate-950 border-slate-800 text-slate-400 hover:border-slate-700";
+                if (isActive) {
+                    btnStyle = "bg-indigo-600 text-white border-indigo-400 shadow-lg shadow-indigo-500/30";
+                } else if (isAnswered) {
+                    btnStyle = "bg-indigo-950/40 border-indigo-800 text-indigo-400";
+                }
+
+                const tileBtn = document.createElement('button');
+                tileBtn.className = `p-2 rounded text-xs font-bold text-center border transition-all ${btnStyle}`;
+                tileBtn.innerText = i + 1;
+                tileBtn.onclick = () => jumpToQuiz(i);
+                matrix.appendChild(tileBtn);
+            }
+        }
+
+        function calculateQuizScore() {
+            let correctCount = 0;
+            quizUserAnswers.forEach((ans, idx) => {
+                if (ans === quizQuestions[idx].correct) {
+                    correctCount++;
+                }
+            });
+            const score = correctCount * 10;
+            document.getElementById('current-score-lbl').innerText = score;
+            document.getElementById('quiz-final-score').innerText = `${score} / 100`;
+
+            if (score === 100 && !this.playedSuccessSound) {
+                sfx.playSuccess();
+                this.playedSuccessSound = true;
+            }
+        }
+
+        function resetQuiz() {
+            sfx.playReset();
+            quizUserAnswers = Array(10).fill(null);
+            activeQuizIdx = 0;
+            this.playedSuccessSound = false;
+            loadQuizQuestion();
+            calculateQuizScore();
+        }
+
+
+        // --- PRINTING/EXPORT LKPD WORK SHEET SYSTEM ---
+        function printLKPD() {
+            sfx.playSuccess();
+            
+            const grp = document.getElementById('lkpd-group').value || '[Belum Diisi]';
+            const q1 = document.getElementById('lkpd-q1').value || '[Belum Ada Jawaban]';
+            const q2 = document.getElementById('lkpd-q2').value || '[Belum Ada Jawaban]';
+
+            let rowsHtml = '';
+            for(let i=1; i<=3; i++) {
+                const v0Val = document.getElementById(`lkpd-v0-${i}`).value;
+                const aVal = document.getElementById(`lkpd-a-${i}`).value;
+                const tVal = document.getElementById(`lkpd-t-${i}`).value;
+                const vtVal = document.getElementById(`lkpd-vt-${i}`).value;
+                const sVal = document.getElementById(`lkpd-s-${i}`).value;
+
+                rowsHtml += `
+                    <tr>
+                        <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center;">${i}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center;">${v0Val}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center;">${aVal}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center;">${tVal}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center;">${vtVal}</td>
+                        <td style="border: 1px solid #cbd5e1; padding: 8px; text-align: center;">${sVal}</td>
+                    </tr>
+                `;
+            }
+
+            const win = window.open('', '_blank');
+            win.document.write(`
+                <html>
+                <head>
+                    <title>Hasil LKPD Kelompok - GLBB Lab Maya</title>
+                    <style>
+                        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; color: #1e293b; padding: 40px; line-height: 1.6; }
+                        .header { border-bottom: 3px double #3b82f6; padding-bottom: 20px; margin-bottom: 30px; text-align: center; }
+                        h1 { margin: 0; color: #1e3a8a; }
+                        h2 { color: #2563eb; border-bottom: 1px solid #e2e8f0; padding-bottom: 5px; margin-top: 30px; }
+                        table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+                        th { background-color: #f1f5f9; border: 1px solid #cbd5e1; padding: 10px; font-weight: bold; }
+                        .meta-info { margin-bottom: 25px; font-size: 14px; background: #f8fafc; padding: 15px; border-radius: 8px; border: 1px solid #e2e8f0; }
+                        .answer-box { background: #f8fafc; border-left: 4px solid #3b82f6; padding: 12px 15px; margin-top: 10px; border-radius: 0 8px 8px 0; font-style: italic; }
+                    </style>
+                </head>
+                <body>
+                    <div class="header">
+                        <h1>LEMBAR KERJA PESERTA DIDIK (LKPD)</h1>
+                        <p style="margin: 5px 0 0; color: #64748b;">Praktikum Virtual Mandiri: Gerak Lurus Berubah Beraturan (GLBB)</p>
+                    </div>
+
+                    <div class="meta-info">
+                        <strong>Identitas Kelompok:</strong> ${grp}<br>
+                        <strong>Mata Pelajaran:</strong> Fisika (Fase F - Kelas XI SMA)<br>
+                        <strong>Tanggal Cetak:</strong> ${new Date().toLocaleDateString('id-ID')}
+                    </div>
+
+                    <h2>I. Tabel Data Hasil Pengamatan</h2>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>No.</th>
+                                <th>Kecepatan Awal (v0) [m/s]</th>
+                                <th>Percepatan (a) [m/s²]</th>
+                                <th>Waktu Tempuh (t) [s]</th>
+                                <th>Kecepatan Sesaat (vt) [m/s]</th>
+                                <th>Posisi Sesaat (s) [m]</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${rowsHtml}
+                        </tbody>
+                    </table>
+
+                    <h2>II. Analisis & Diskusi</h2>
+                    <div>
+                        <strong>1. Bagaimana pengaruh tanda (+/-) percepatan terhadap grafik kecepatan-waktu?</strong>
+                        <div class="answer-box">${q1}</div>
+                    </div>
+                    <div>
+                        <strong style="display: block; margin-top: 15px;">2. Hubungan antara jarak dengan waktu tempuh pada GLBB:</strong>
+                        <div class="answer-box">${q2}</div>
+                    </div>
+
+                    <div style="margin-top: 60px; text-align: right; font-size: 13px; color: #64748b;">
+                        <p>Paraf Guru Pembimbing,</p>
+                        <br><br>
+                        <p>__________________________</p>
+                    </div>
+
+                    <script>
+                        window.onload = function() { window.print(); }
+                    <\/script>
+                </body>
+                </html>
+            `);
+            win.document.close();
+        }
+
+        // Initialize Everything on Load
+        window.onload = function() {
+            // Start simulation of splash screen loading first
+            simulateLoading();
+            updateSimParams();
+            loadQuizQuestion();
+
+            window.addEventListener('resize', () => {
+                if (!document.getElementById('splash-screen')) {
+                    initCanvases();
+                }
+            });
+        };
+    </script>
+</body>
+</html>
